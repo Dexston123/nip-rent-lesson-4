@@ -28,3 +28,15 @@ def test_all_tenants_loaded_to_manager():
 
     for tenant_key, tenant_data in tenants_data.items():
         assert tenant_data["name"] in manager_names
+
+
+def test_tenants_have_valid_apartments():
+    parameters = Parameters()
+    manager = Manager(parameters)
+
+    assert manager.validate_tenants_apartments() is True
+
+    some_tenant = next(iter(manager.tenants.values()))
+    some_tenant.apartment = "non-existing-apartment"
+
+    assert manager.validate_tenants_apartments() is False
